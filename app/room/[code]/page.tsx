@@ -29,29 +29,40 @@ export default function RoomPage() {
 
     setUserName(storedName);
 
-    const socket = getSocket();
+    const socketInstance = getSocket();
+    if (!socketInstance) {
+      setError('Failed to connect to server');
+      setLoading(false);
+      return;
+    }
 
     const initializeRoom = () => {
-      setUserId(socket.id);
+      if (!socketInstance.id) {
+        setError('Socket connection not established');
+        setLoading(false);
+        return;
+      }
+
+      setUserId(socketInstance.id);
 
       // Listen for room updates
-      socket.on('room-update', (room: RoomState) => {
+      socketInstance.on('room-update', (room: RoomState) => {
         setRoomState(room);
         setLoading(false);
       });
 
-      socket.on('room-joined', (room: RoomState) => {
+      socketInstance.on('room-joined', (room: RoomState) => {
         setRoomState(room);
         setLoading(false);
       });
 
-      socket.on('error', (message: string) => {
+      socketInstance.on('error', (message: string) => {
         setError(message);
         setLoading(false);
       });
 
       // Try to join the room
-      socket.emit('join-room', roomCode, storedName, (success, room) => {
+      socketInstance.emit('join-room', roomCode, storedName, (success, room) => {
         if (success && room) {
           setRoomState(room);
           setLoading(false);
@@ -63,45 +74,45 @@ export default function RoomPage() {
     };
 
     // Wait for socket to connect before joining room
-    if (socket.connected) {
+    if (socketInstance.connected) {
       initializeRoom();
     } else {
-      socket.on('connect', initializeRoom);
+      socketInstance.on('connect', initializeRoom);
     }
 
     return () => {
-      socket.off('connect', initializeRoom);
-      socket.off('room-update');
-      socket.off('room-joined');
-      socket.off('error');
-      if (socket.connected) {
-        socket.emit('leave-room', roomCode, socket.id);
+      socketInstance.off('connect', initializeRoom);
+      socketInstance.off('room-update');
+      socketInstance.off('room-joined');
+      socketInstance.off('error');
+      if (socketInstance.connected && socketInstance.id) {
+        socketInstance.emit('leave-room', roomCode, socketInstance.id);
       }
     };
   }, [roomCode, router]);
 
   const handleVote = (value: string) => {
-    const socket = getSocket();
-    if (!socket) return;
-    socket.emit('vote', roomCode, socket.id, value);
+    const socketInstance = getSocket();
+    if (!socketInstance?.id) return;
+    socketInstance.emit('vote', roomCode, socketInstance.id, value);
   };
 
   const handleChangeScale = (scale: VotingScaleType) => {
-    const socket = getSocket();
-    if (!socket) return;
-    socket.emit('change-scale', roomCode, scale);
+    const socketInstance = getSocket();
+    if (!socketInstance) return;
+    socketInstance.emit('change-scale', roomCode, scale);
   };
 
   const handleReveal = () => {
-    const socket = getSocket();
-    if (!socket) return;
-    socket.emit('reveal-votes', roomCode);
+    const socketInstance = getSocket();
+    if (!socketInstance) return;
+    socketInstance.emit('reveal-votes', roomCode);
   };
 
   const handleReset = () => {
-    const socket = getSocket();
-    if (!socket) return;
-    socket.emit('reset-votes', roomCode);
+    const socketInstance = getSocket();
+    if (!socketInstance) return;
+    socketInstance.emit('reset-votes', roomCode);
   };
 
   const handleCopyCode = () => {
@@ -111,9 +122,9 @@ export default function RoomPage() {
   };
 
   const handleLeaveRoom = () => {
-    const socket = getSocket();
-    if (!socket) return;
-    socket.emit('leave-room', roomCode, socket.id);
+    const socketInstance = getSocket();
+    if (!socketInstance?.id) return;
+    socketInstance.emit('leave-room', roomCode, socketInstance.id);
     router.push('/lobby');
   };
 

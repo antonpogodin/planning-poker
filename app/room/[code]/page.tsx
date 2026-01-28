@@ -82,21 +82,25 @@ export default function RoomPage() {
 
   const handleVote = (value: string) => {
     const socket = getSocket();
+    if (!socket) return;
     socket.emit('vote', roomCode, socket.id, value);
   };
 
   const handleChangeScale = (scale: VotingScaleType) => {
     const socket = getSocket();
+    if (!socket) return;
     socket.emit('change-scale', roomCode, scale);
   };
 
   const handleReveal = () => {
     const socket = getSocket();
+    if (!socket) return;
     socket.emit('reveal-votes', roomCode);
   };
 
   const handleReset = () => {
     const socket = getSocket();
+    if (!socket) return;
     socket.emit('reset-votes', roomCode);
   };
 
@@ -108,6 +112,7 @@ export default function RoomPage() {
 
   const handleLeaveRoom = () => {
     const socket = getSocket();
+    if (!socket) return;
     socket.emit('leave-room', roomCode, socket.id);
     router.push('/lobby');
   };

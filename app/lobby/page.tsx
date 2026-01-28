@@ -38,8 +38,14 @@ export default function Lobby() {
     setError('');
 
     const socket = getSocket();
+    if (!socket) {
+      setError('Failed to connect to server');
+      setLoading(false);
+      return;
+    }
 
     const createRoom = () => {
+      if (!socket) return;
       socket.emit('create-room', userName, (code: string) => {
         setLoading(false);
         router.push(`/room/${code}`);
@@ -67,8 +73,14 @@ export default function Lobby() {
     setError('');
 
     const socket = getSocket();
+    if (!socket) {
+      setError('Failed to connect to server');
+      setLoading(false);
+      return;
+    }
 
     const joinRoom = () => {
+      if (!socket) return;
       socket.emit('join-room', code, userName, (success, room) => {
         setLoading(false);
         if (success && room) {

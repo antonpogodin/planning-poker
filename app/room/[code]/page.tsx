@@ -11,7 +11,7 @@ import VotingResults from '@/components/VotingResults';
 export default function RoomPage() {
   const params = useParams();
   const router = useRouter();
-  const roomCode = params.code as string;
+  const roomCode = params?.code as string;
 
   const [userName, setUserName] = useState('');
   const [userId, setUserId] = useState('');

@@ -37,25 +37,24 @@ export default function Lobby() {
     setLoading(true);
     setError('');
 
-    const socket = getSocket();
-    if (!socket) {
+    const socketInstance = getSocket();
+    if (!socketInstance) {
       setError('Failed to connect to server');
       setLoading(false);
       return;
     }
 
     const createRoom = () => {
-      if (!socket) return;
-      socket.emit('create-room', userName, (code: string) => {
+      socketInstance.emit('create-room', userName, (code: string) => {
         setLoading(false);
         router.push(`/room/${code}`);
       });
     };
 
-    if (socket.connected) {
+    if (socketInstance.connected) {
       createRoom();
     } else {
-      socket.once('connect', createRoom);
+      socketInstance.once('connect', createRoom);
     }
   };
 
@@ -72,16 +71,15 @@ export default function Lobby() {
     setLoading(true);
     setError('');
 
-    const socket = getSocket();
-    if (!socket) {
+    const socketInstance = getSocket();
+    if (!socketInstance) {
       setError('Failed to connect to server');
       setLoading(false);
       return;
     }
 
     const joinRoom = () => {
-      if (!socket) return;
-      socket.emit('join-room', code, userName, (success, room) => {
+      socketInstance.emit('join-room', code, userName, (success, room) => {
         setLoading(false);
         if (success && room) {
           router.push(`/room/${code}`);
@@ -91,10 +89,10 @@ export default function Lobby() {
       });
     };
 
-    if (socket.connected) {
+    if (socketInstance.connected) {
       joinRoom();
     } else {
-      socket.once('connect', joinRoom);
+      socketInstance.once('connect', joinRoom);
     }
   };
 

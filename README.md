@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Planning Poker
 
-## Getting Started
+A real-time planning poker application built with Next.js and Socket.IO.
 
-First, run the development server:
+## Features
+
+- Real-time collaboration with WebSocket connections
+- Multiple voting scales (Fibonacci, T-shirt sizes, powers of 2)
+- Room-based sessions with shareable 6-digit codes
+- Vote reveal/hide functionality
+- Responsive design with dark mode support
+
+## Architecture
+
+Full-stack Next.js application with:
+- **Frontend**: React 19 + Next.js 16 + Tailwind CSS 4
+- **Backend**: Socket.IO server for real-time WebSocket connections
+- **Deployment**: Single service on Render.com (runs both frontend + backend)
+
+## Quick Start - Local Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Install dependencies
+npm install
+
+# Start development server (with Socket.IO)
+npm run dev:custom
+
+# Visit http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deployment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Deploy to Render.com (Recommended)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Go to [render.com](https://render.com) and sign up with GitHub
+2. Click **"New +"** → **"Web Service"**
+3. Connect this repository
+4. Render will auto-detect `render.yaml` configuration
+5. Click **"Create Web Service"**
+6. Visit your app at: `https://planning-poker-xxxx.onrender.com` 🎉
 
-## Learn More
+**📖 Detailed guide:** [RENDER_DEPLOY.md](RENDER_DEPLOY.md)
 
-To learn more about Next.js, take a look at the following resources:
+**Alternative:** Split deployment (Vercel + separate backend) - see [DEPLOYMENT.md](DEPLOYMENT.md)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Environment Variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+No environment variables required for deployment to Render.com.
 
-## Deploy on Vercel
+The app works out of the box with default configuration.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Tech Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS 4
+- **Backend**: Node.js, Socket.IO
+- **Deployment**: Vercel (frontend) + Railway (backend)
+
+## Development Scripts
+
+```bash
+npm run dev          # Next.js dev server (Pages API - limited Socket.IO)
+npm run dev:custom   # Custom server with full Socket.IO support (recommended)
+npm run build        # Build for production
+npm run start        # Start production Next.js server
+npm run start:custom # Start production custom server
+```
+
+## License
+
+MIT

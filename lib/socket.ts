@@ -22,7 +22,12 @@ export function initSocket() {
     isInitializing = true;
     console.log('Initializing socket connection...');
 
-    socket = io({
+    // Use environment variable for socket server URL
+    // For production: set NEXT_PUBLIC_SOCKET_URL to your backend URL (e.g., Railway)
+    // For local dev: leave empty to use same origin
+    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || '';
+
+    socket = io(socketUrl, {
       path: '/api/socket',
       addTrailingSlash: false,
       transports: ['polling', 'websocket'],

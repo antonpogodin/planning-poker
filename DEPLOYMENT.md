@@ -2,23 +2,38 @@
 
 This application consists of two parts:
 1. **Frontend (Next.js)** - Deployed on Vercel
-2. **Backend (Socket.IO Server)** - Needs to be deployed on a platform supporting WebSockets
+2. **Backend (Socket.IO Server)** - Deployed on Railway/Render/Fly.io
 
 ## Why Separate Deployments?
 
-Vercel uses serverless functions which don't support persistent WebSocket connections required by Socket.IO. The backend must be deployed on a platform with long-running processes.
+Vercel's serverless architecture doesn't support persistent WebSocket connections required by Socket.IO. Testing confirmed that even with Pages API routes, Vercel returns 400 errors on Socket.IO connections.
+
+The backend must be deployed on a platform with long-running processes that support WebSockets.
 
 ## Step 1: Deploy Backend (Socket.IO Server)
 
-### Option A: Deploy to Railway (Recommended)
+### Option A: Deploy to Railway (Recommended - Easiest)
 
-1. Go to [railway.app](https://railway.app)
-2. Sign up with GitHub
-3. Click "New Project" → "Deploy from GitHub repo"
-4. Select this repository
-5. Railway will auto-detect the Node.js app
-6. Set the start command: `NODE_ENV=production node server.js`
-7. Railway will assign you a URL like `https://your-app.up.railway.app`
+1. Go to [railway.app](https://railway.app) and sign up with GitHub
+
+2. Click **"New Project"** → **"Deploy from GitHub repo"**
+
+3. Select the **planning-poker** repository
+
+4. Railway will auto-detect it as a Node.js app
+
+5. Go to **Settings** tab and configure:
+   - **Start Command**: `npm run start:custom`
+   - Or: `NODE_ENV=production node server.js`
+
+6. Go to **Settings** → **Networking** → Click **"Generate Domain"**
+   - You'll get a URL like: `https://planning-poker-production.up.railway.app`
+   - Copy this URL for Step 2
+
+7. The backend will start automatically. Check logs to verify:
+   ```
+   > Ready on http://localhost:3000
+   ```
 
 ### Option B: Deploy to Render
 

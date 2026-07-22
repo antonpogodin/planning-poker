@@ -10,7 +10,7 @@ export default function VotingResults({ votes, votesRevealed }: VotingResultsPro
 
   // Filter out null votes and special values
   const validVotes = Object.values(votes)
-    .filter((vote): vote is string => vote !== null && vote !== '?' && vote !== '🍺')
+    .filter((vote): vote is string => vote !== null && vote !== '?' && vote !== '🍺' && vote !== '🍷')
     .map((vote) => parseFloat(vote))
     .filter((vote) => !isNaN(vote));
 
